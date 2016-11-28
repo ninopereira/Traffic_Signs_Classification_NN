@@ -1,2 +1,4 @@
 traffic-signs-data/*
+.ipynb_checkpoints/*
+.gitignore~
 
