@@ -4,6 +4,6 @@ traffic-signs-data/*
 NP_model.ckpt
 NP_model.ckpt.meta
 checkpoint
-model.ckpt
-model.ckpt.meta
+model*
+
 
