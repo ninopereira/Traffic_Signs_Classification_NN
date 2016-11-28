@@ -1,4 +1,9 @@
 traffic-signs-data/*
 .ipynb_checkpoints/*
 .gitignore~
+NP_model.ckpt
+NP_model.ckpt.meta
+checkpoint
+model.ckpt
+model.ckpt.meta
 
