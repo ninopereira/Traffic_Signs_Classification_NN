@@ -14363,6 +14363,10 @@ Accuracy: 0.923437
 <p>batch_size = 128</p>
 <p>display_step = 1</p>
 <p>keep_prob = 0.75 (for dropout implementation, avoiding overfitting)</p>
+<p>To select the learning rate I first experimented with a value of 0.001. I was not seeing fast progress for the accuracy so I decided to make it slightly larger in order to converge faster to higher accuracies. Of course, have a larger learning rate also means that when we are already at high accuracies, it is much more difficult to improve the results further. Ideally we would want to make the learning rate variable and decreasing as the number of iterations increase.
+I selected the same batch size used in the examples. I don't have a very strong reason why should we choose this particular number for the batch size except for the fact that this value should be big enough to accomodate a significant number of random samples and also small enough to enable the training to take place in a reduced amount of time.
+The number of training iterations was such that would allow me to get very low cost values and also high accuracy results in a relatively short period of training time. By looking at the results now I would probably reduce it to about 30 or 35 iterations. We can see clearly that after 30 iterations the learning rate should be lower in order to allow smoother transitions and avoid the cost to fluctuate a lot for small values.
+The keep probability value was chosen to be 0.75 in order to avoid overfitting and increase robustness by creating redundancies in the nn. 0.75 seems a reasonable value in the sense that we still have 75% of the neurons active for a particular layer and 25% are randomly silenced during one training iteration. Having smaller values (e.g. 0.5) would make it more robust but probably it will take more time to converge.</p>
 
 </div>
 </div>
@@ -14384,7 +14388,9 @@ Accuracy: 0.923437
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <p>I tried to use a convolutional neural network because it is best suited to handle statistical invariance for features in images wich might not be properly aligned and centered in the image. For this I used 3 layers of CNNs.
-I also wanted to make my model deeper and more capable of handling more complicated problems. As such I included 2 aditional layers of fully connected nn. These layers include Relu units (to make it useful for non-linear problems) and also the dropout technique which helps preventing overfitting and makes the NN more robust as it favours redundancy.
+I also wanted to make my model deeper and more capable of handling more complicated problems. As such I included 2 aditional hidden layers of fully connected nn. These layers include Relu units (to make it useful for non-linear problems) and also the dropout technique which helps preventing overfitting and makes the NN more robust as it favours redundancy. 
+I chose to have 3 CNN layers as it enables us to have 3 different levels of hierarchichal representations. As an example, the first layer would detect simple lines and curves, the second layer could include representation of connected lines, circles, triangles and squares and the third layer could already include a higher level discrimination of things like numbers and symbols.
+For each additional layer we add to the nn architecture we are increasing the complexity and therefore sensible decision has to be made on whereas or not including these extra layers would really improve the performance. I have to say I didn't test other architectures and I did choose to go along with this particular one because at this stage (of y learning process) I was more interested to gain understanding on how the nn works and if I could include extra layers and make it work, rather than focus on getting the most efficient architecture.
 In addition to these ideas I found that the architecture of the paper referenced in the course for traffic classification is very interesting and produced really good results. My architecture follows part of that structure.</p>
 
 </div>
@@ -16206,7 +16212,9 @@ Prediction on  new_treated_images/parking.png  is  11  meaning:  Right-of-way at
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
+<p><strong>Performance on New Images</strong></p>
 <p>Unfortunatelly my model doesn't perform as well on these captured images. Only 3 out of 10 were correctly labeled.</p>
+<p>The prediction accuracy of the result is 30% for this particular set of examples. Previously we've seen that the accuracy on the validation set was about 99% and on the test set about 92%. Both these values are much higher than the one we got (30%) in this particular case. The justification for this might lie partially in one hand, on the particular challenges these images impose (which have already been pointed out in question 6), and on the other hand, related to the original dataset which may not include representation of some of these new images. There is also a chance that the architecture and training method was not the most adequate and therefore the network outputs some false positive and false negative results.</p>
 
 </div>
 </div>
