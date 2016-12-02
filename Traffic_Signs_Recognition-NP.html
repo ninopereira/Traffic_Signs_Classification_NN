@@ -13855,42 +13855,59 @@ My Architecture is composed of:</p>
     input = 32x32x1;
     feature map = 1;
     patch = (5x5);
+    stride = (1,1); (S=1)
+    padding = "SAME" of size 1 (P=1)
     output depth = 32;
-    output = 32x32x32;</p>
+    output = 30x30x32;</p>
 <p>Max Pooling (down-sampling):
-    stride = (2,2);
-    Padding = 'SAME';
-    output = 32x32x32;</p>
+    stride = (2,2); (S=2)
+    output = 15x15x32;</p>
+
+<pre><code>num_params = (5x5x1+1)x32 = 832
+
+</code></pre>
 <p>2) Convolution 2:
-    input = 32x32x32;
+    input = 15x15x32;
     feature map = 1;
     patch = (5x5);
+    stride = (1,1); (S=1)
+    padding = "SAME" of size 1 (P=1)
     output depth = 64;
-    output = 32x32x64;</p>
+    output = 13x13x64;</p>
 <p>Max Pooling (down-sampling):
     stride = (2,2);
-    Padding = 'SAME';
-    output = 32x32x64;</p>
+    output = 7x7x64;</p>
+
+<pre><code>num_params = (5x5x1+1)x64 = 1664
+
+</code></pre>
 <p>3) Convolution 3:
-    input = 32x32x64;
+    input = 7x7x64;
     feature map = 1;
     patch = (5x5);
+    stride = (1,1); (S=1)
+    padding = "SAME" of size 1
     output depth = 128;
-    output = 32x32x128;</p>
+    output = 5x5x128;</p>
 <p>Max Pooling (down-sampling):
     stride = (2,2);
-    Padding = 'SAME';
-    output = 32x32x128;</p>
-<p>5) Fully connected layer:
+    output = 3x3x128;</p>
+
+<pre><code>num_params = (5x5x1+1)x128 = 3328
+
+</code></pre>
+<p>5) Fully connected layer_1:
     number of layers = 256;
-    input = 131072x1 (32<em>32</em>128);
+    input = 1152x1 (3<em>3</em>128);
     output = 256x1;</p>
 
 <pre><code>Relu activator:
 output = 256x1;
 
+num_params = (1152*256) = 294912
+
 </code></pre>
-<p>6) Fully connected layer 1:
+<p>6) Fully connected layer 2:
     number of layers = 256;
     input = 256x1;
     output = 256x1;</p>
@@ -13903,22 +13920,14 @@ keep_prob = 0.75 (meaning 25% are dropped each iteration);
 
 Flatten layer;
 
-</code></pre>
-<p>7) Fully connected layer 2:
-    number of layers = 256;
-    input = 256x1;
-    output = 256x1;</p>
-
-<pre><code>Relu activator:
-output = 256x1;
-
-Apply Dropout;
-keep_prob = 0.75 (meaning 25% are dropped each iteration);
+num_params = (256*256) = 65536
 
 </code></pre>
-<p>8) Output Prediction
+<p>7) Output Prediction
     Input = 256x1;
     Output = 43x1 (43 classes);</p>
+
+<pre><code>num_params = (256*43) = 11008</code></pre>
 
 </div>
 </div>
@@ -13994,11 +14003,11 @@ keep_prob = 0.75 (meaning 25% are dropped each iteration);
 
 <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;layer_1&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">(</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_1&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_1&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span> <span class="c1"># patch = 5x5</span>
     <span class="s1">&#39;layer_2&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">(</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_1&#39;</span><span class="p">],</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_2&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_1&#39;</span><span class="p">],</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_2&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span> <span class="c1"># patch = 5x5</span>
     <span class="s1">&#39;layer_3&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">(</span>
-        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_2&#39;</span><span class="p">],</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_3&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_2&#39;</span><span class="p">],</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;layer_3&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span> <span class="c1"># patch = 5x5</span>
     <span class="s1">&#39;fully_connected_1&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">(</span>
         <span class="p">[</span><span class="n">n_input</span><span class="p">,</span> <span class="n">layer_width</span><span class="p">[</span><span class="s1">&#39;fully_connected&#39;</span><span class="p">]],</span><span class="n">stddev</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
     <span class="s1">&#39;fully_connected_2&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">truncated_normal</span><span class="p">(</span>
