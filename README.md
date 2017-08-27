@@ -1,4 +1,6 @@
-# Traffic Signs Recognition NN
+# Traffic Signs Classification NN
+![result](classification_results.png)
+
 Neural Network implementation in Python (Jupyter Notebook) using TensorFlow to classify traffic Signs from German dataset (gtsdb)
 
 # Instructions
@@ -42,6 +44,8 @@ Other methods could be used to preprocess the data such as adjusting the contras
 All the images of the dataset should be of equal size and in order to be able to use them together with the provided dataset they should be of same size (32x32) and image color depth (3). In fact, since at this point we already preprocees the original dataset and we have now only gray images, there is only one dimension for color depth. I've separated the data in 3 sets: training, test and validation data. The validation set was taken from the original training set. A fraction of 10% of that original training set is now the validation set and the remaining 90% is still part of the training data. The testing data is bigger than the validation set and should account for almost 30% of the total dataset. I have split both the data images and the labels using the train_test_split function.
 As we used the preprocesses images we don't need to apply the same preprocessing techniques, rgb to grayscale conversion and make the mean zero, because they are already in the correct format.
 
+![Samples](samples.png)
+
 ## Architecture
 
 The Architecture is as follows:
@@ -77,7 +81,7 @@ num_params = (256*256) = 65536
 num_params = (256*43) = 11008
 
 
-## Training your model (Type of optimizer, batch size, epochs, hyperparameters, etc.)
+## Training the model (Type of optimizer, batch size, epochs, hyperparameters, etc.)
 
 I used a gradient descent optimizer with the following parameters (names are self explanatory):
 learning_rate = 0.05
@@ -124,6 +128,6 @@ Answer:
 The provided images were previously resized to meet the same dimensions 32x32 pixels. These images were imported using standard opencv functions, like imread to read the file and cvtColor to convert the color format to RGB. These images then went to through the same preprocessing as the training set, i.e., conversion to grayscale, zero mean and normalisation. The classification was done using the softmax and previously determined logits on this new collection of images.
 
 Result example
-![result](classification_result.png)
+![result](classification_results.png)
 
 
